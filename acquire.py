@@ -54,6 +54,45 @@ def api_request():
         df = pd.concat([df, pd.DataFrame(data['payload']['sales'])], ignore_index=True)
     return df
 
+
+
+def get_df_params(name):
+    """
+    This function takes in the string
+    'items', 'stores', or 'sales' and
+    returns a df containing all pages and
+    creates a .csv file for future use.
+    """
+    # Create an empty list names `results`.
+    results = []
+    
+    # Create api_url variable
+    api_url = 'https://python.zach.lol/api/v1/'
+    
+    # Loop through the page parameters until an empty response is returned.
+    for i in range(3):
+        response =  requests.get(items_url, params = {"page": i+1})    
+    
+        # We have reached the end of the results
+        if len(response.json()) == 0:   
+            break
+            
+        else:
+            # Convert my response to a dictionary and store as variable `data`
+            data = response.json()
+        
+            # Add the list of dictionaries to my list
+            results.extend(data['payload'][name])
+    
+    # Create DataFrame from list
+    df = pd.DataFrame(results)
+    
+    # Write DataFrame to csv file for future use
+    df.to_csv(name + '.csv')
+    
+    return df
+
+
 def get_store_data():
     """
     This function checks for csv files
