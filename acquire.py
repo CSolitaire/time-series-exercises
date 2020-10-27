@@ -11,11 +11,11 @@ def get_connection(db, user=user, host=host, password=password):
     '''
     return f'mysql+pymysql://{user}:{password}@{host}/{db}'
 
-def read_csv_url_csv(url):
+def read_csv(csv):
     '''
-    This function follows a url to a csv and reads in the csv from the url
+    This function reads in the csv 
     '''
-    df = pd.read_csv(url)
+    df = pd.read_csv(csv)
     return df
 
 def get_csv_url_data(file_name, url, cached=False):
