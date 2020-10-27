@@ -44,15 +44,12 @@ def numeric_hists(df, bins=20):
 
 ######################## Function to acquire df and prep store data ####################
 
-def prepped_store_df():
+def prepped_store_df(df):
     """
     Function to acquire and prepare
     store dataframe and show
     distributions for numeric columns
     """
-    # Acquire the df
-    df = acquire.get_store_data()
-    
     # Convert sale_date to DateTimeIndex
     df['sale_date'] = pd.to_datetime(df.sale_date)
     df = df.set_index('sale_date').sort_index()
@@ -73,3 +70,5 @@ def prepped_store_df():
     
     # Display distributions of numeric columns
     numeric_hists(df)
+
+    return df
