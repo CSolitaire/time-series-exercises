@@ -31,30 +31,42 @@ def get_csv_url_data(file_name, url, cached=False):
 
 ################################################################################################################
 
-def api_request():
-    '''
-    This function retrieves all items of all pages
-    from the base url api and saves it as a dataframe
-    '''
-    #saving the base url
+import os
+import pandas as pd
+import numpy as np
+import requests
+
+######################### Helper function used in create big_df ########################################
+
+def get_df(name):
+    """
+    This function takes in the string
+    'items', 'stores', or 'sales' and
+    returns a df containing all pages and
+    creates a .csv file for future use.
+    """
     base_url = 'https://python.zach.lol'
-    #opening/visiting the url
-    response = requests.get('https://python.zach.lol/api/v1/sales')
-    #saving the data as a json script
+    api_url = base_url + '/api/v1/'
+    response = requests.get(api_url + name)
     data = response.json()
-    #saving the json script as a dataframe
-    df = pd.DataFrame(data['payload']['sales'])
-    #creating a loop to scan all the items pages
-    for number in range(1, data['payload']['max_page']):
-        #moving into the next page of items
+    
+    # create list from 1st page
+    my_list = data['payload'][name]
+    
+    # loop through the pages and add to list
+    while data['payload']['next_page'] != None:
         response = requests.get(base_url + data['payload']['next_page'])
-        #saving the as a json script
         data = response.json()
-        #adding the next page of items onto the original dataframe
-        df = pd.concat([df, pd.DataFrame(data['payload']['sales'])], ignore_index=True)
+        my_list.extend(data['payload'][name])
+    
+    # Create DataFrame from list
+    df = pd.DataFrame(my_list)
+    
+    # Write DataFrame to csv file for future use
+    df.to_csv(name + '.csv')
     return df
 
-
+######################### Params Helper function, can be used in big_df ###############################
 
 def get_df_params(name):
     """
@@ -92,6 +104,7 @@ def get_df_params(name):
     
     return df
 
+########################### big_df function  ######################################
 
 def get_store_data():
     """
@@ -128,7 +141,8 @@ def get_store_data():
         df.to_csv('big_df.csv')
         return df
 
-################################################################################################################
+    
+############################## opsd energy function  #############################
 
 def opsd_germany_daily():
     """
@@ -142,5 +156,3 @@ def opsd_germany_daily():
         df = pd.read_csv(url)
         df.to_csv('opsd_germany_daily.csv')
     return df
-
-
