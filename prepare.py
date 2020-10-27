@@ -72,3 +72,26 @@ def prepped_store_df(df):
     numeric_hists(df)
 
     return df
+
+######################## Function to acquire df and prep energy data ####################
+
+def prepped_enery_df(df):
+    """
+    Function to acquire and prepare
+    energy dataframe and show
+    distributions for numeric columns
+    """
+    # Convert sale_date to DateTimeIndex
+    df['Date'] = pd.to_datetime(df.Date)
+    df = df.set_index('Date').sort_index()
+    
+    # Create date part columns
+    df['month'] = df.index.month
+    df['weekday'] = df.index.day_name()
+    
+    # Fill NaN
+    df = df.fillna(0)
+    
+    # Display distributions of numeric columns
+    numeric_hists(df)
+    return df
