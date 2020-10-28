@@ -27,6 +27,7 @@ def hist_plot(df, col, unit_label='', bins=10):
     plt.title('Distribution of ' + col)
     plt.xlabel(unit_label)
     plt.ylabel('Count')
+    plt.tight_layout()
     plt.show()
 
 ############################# Function for numeric distributions #################################
@@ -40,6 +41,7 @@ def numeric_hists(df, bins=20):
     num_df = df.select_dtypes(include=np.number)
     num_df.hist(bins=bins, color='thistle', ec='black')
     plt.suptitle('Numeric Column Distributions')
+    plt.tight_layout()
     plt.show()
 
 ######################## Function to acquire df and prep store data ####################
@@ -75,7 +77,7 @@ def prepped_store_df(df):
 
 ######################## Function to acquire df and prep energy data ####################
 
-def prepped_enery_df(df):
+def prepped_energy_df(df):
     """
     Function to acquire and prepare
     energy dataframe and show
